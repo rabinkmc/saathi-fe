@@ -1,18 +1,43 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <NavBar @logout="logOut"/>
+  <div v-for="item in posts" :key="item">
+    <CreateUserPost :post="item" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import CreateUserPost from "../components/CreateUserPost.vue";
+import NavBar from "../components/NavBar.vue";
 
 export default {
-  name: 'HomeView',
+  name: "HomeView",
   components: {
-    HelloWorld
-  }
-}
+    CreateUserPost,
+    NavBar
+  },
+  data() {
+    return {
+      posts: {},
+      headers: {"Authorization": `Bearer ${localStorage.getItem("token")}`},
+      url: "posts/"
+    }
+  },
+  created() {
+    this.getPosts()
+  },
+  methods: {
+    logOut() {
+      localStorage.clear();
+      this.$http.defaults.headers.common["Authorization"] = null;
+      this.$router.push("/login");
+    },
+    getPosts() {
+      this.$http.get(this.url, {headers: this.headers}).then(
+          response => {
+            this.posts = response.data
+          }
+      )
+    }
+  },
+};
 </script>
