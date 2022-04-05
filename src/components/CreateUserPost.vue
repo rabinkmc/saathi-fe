@@ -1,25 +1,80 @@
 <template>
- <!-- component -->
-<!-- post card -->
-<div class="flex bg-white shadow-lg rounded-lg mx-4 md:mx-auto my-10 max-w-md md:max-w-2xl "><!--horizantil margin is just for display-->
-   <div class="flex items-stretch px-4 py-6 w-full">
-      <img class="w-12 h-12 rounded-full object-cover mr-4 shadow" src="https://images.unsplash.com/photo-1542156822-6924d1a71ace?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="avatar">
-      <div class="grow">
-         <div class="flex justify-between">
-            <h2 class="text-lg font-semibold text-gray-900 -mt-1">{{post.author}}</h2>
-            <small class="text-sm text-gray-700">22h ago</small>
-         </div>
-        <p class="text-gray-700">{{post.modified}} </p>
-         <p class="mt-3 text-black">{{post.title}}</p>
-         <p class="mt-3 text-gray-700 text-sm">{{post.body}}</p>
-      </div>
-   </div>
-</div>
+  <div class="py-8 px-8 border-2 border-gray-300">
+    <div>
+      <input type="text" id="small-input" placeholder="Enter title"
+             class="my-4 block p-2 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="mb-6">
+      <input type="text" id="large-input" placeholder="Enter description for the post"
+             class="block p-4 w-full h-40 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+
+    <div class="mb-6">
+      <input type="file" @change="onChange"/>
+    </div>
+
+    <div class="mb-6">
+      <button class="px-6
+      py-2.5
+      bg-slate-600
+      text-white
+      font-medium
+      rounded
+      my-2
+      ">
+        Submit
+      </button>
+    </div>
+    <!--  <div class="flex justify-center mt-8">-->
+    <!--    <div class="max-w-2xl rounded-lg shadow-xl bg-gray-50">-->
+    <!--      <div class="m-4">-->
+    <!--        <label class="inline-block mb-2 text-gray-500">{{ image ? "" : "Choose" }} Image File</label>-->
+    <!--        <div class="flex items-center justify-center w-full">-->
+    <!--          <label-->
+    <!--              class="flex flex-col w-full h-32 border-4 border-blue-200 border-dashed hover:bg-gray-100 hover:border-gray-300">-->
+    <!--            <div class="flex flex-col items-center justify-center pt-7">-->
+    <!--              <p class="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600">-->
+    <!--                {{ image ? image[0].name : "Upload an image" }}</p>-->
+    <!--            </div>-->
+    <!--            <input type="file" @change="onChange" class="opacity-0"/>-->
+    <!--          </label>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--      <div class="flex justify-center p-2">-->
+    <!--        <button class="w-full px-4 py-2 text-white bg-blue-500 rounded shadow-xl">Upload</button>-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <!--  </div>-->
+  </div>
 </template>
 <script>
 export default {
-  props: {
-    post: {}
+  data() {
+    return {
+      file: null,
+      headers: {"Authorization": `Bearer ${localStorage.getItem("token")}`},
+      url: "posts/",
+      image: null
+    }
+  },
+  methods: {
+    onChange(event) {
+      console.log(event)
+      console.log(event.target)
+      console.log(event.target.files[0].name)
+      this.image = event.target.files
+    },
+    onUpload() {
+      const formData = new FormData()
+      formData.append('image', this.image, this.image.name)
+      this.$http.post(this.url, formData, {headers: this.headers}).then((response) => {
+        console.log(response)
+      })
+    }
+
+
   }
+
 }
+
 </script>
