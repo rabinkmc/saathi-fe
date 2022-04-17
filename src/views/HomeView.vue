@@ -1,6 +1,6 @@
 <template>
   <NavBar @logout="logOut"/>
-<button type="button" class="px-6
+  <button type="button" class="px-6
       py-2.5
       bg-slate-600
       text-white
@@ -8,15 +8,15 @@
       rounded
       my-2
       "
-     @click = "createPost= !createPost"
-      >
-  {{createPost? "Cancel": "Create"}}
-</button>
+          @click="createPost= !createPost"
+  >
+    {{ createPost ? "Cancel" : "Create" }}
+  </button>
   <template v-if="createPost">
-    <CreateUserPost/>
+    <CreateUserPost @created="postCreate"/>
   </template>
   <div v-for="item in posts" :key="item">
-    <UserPost :post="item" />
+    <UserPost :post="item"/>
   </div>
 </template>
 
@@ -36,7 +36,6 @@ export default {
     return {
       posts: {},
       createPost: false,
-      headers: {"Authorization": `Bearer ${localStorage.getItem("token")}`},
       url: "posts/"
     }
   },
@@ -46,15 +45,18 @@ export default {
   methods: {
     logOut() {
       localStorage.clear();
-      this.$http.defaults.headers.common["Authorization"] = null;
-      this.$router.push("/login");
+      this.$router.push("/");
     },
     getPosts() {
-      this.$http.get(this.url, {headers: this.headers}).then(
+      this.$http.get(this.url).then(
           response => {
             this.posts = response.data
           }
       )
+    },
+    postCreate() {
+      this.createPost = false
+      this.getPosts()
     }
   },
 };
