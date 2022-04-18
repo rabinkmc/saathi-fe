@@ -42,22 +42,16 @@ export default {
   },
   methods: {
     onChange(event) {
-      console.log(event)
-      console.log(event.target)
-      console.log(event.target.files[0].name)
-      this.image = event.target.files
+      this.image = event.target.files[0]
     },
     postData() {
       const formData = new FormData()
-      // if (this.image) {
-      //   formData.append('image', this.image, this.image.name)
-      // }
+      if (this.image) formData.append('image', this.image)
       formData.append('title', this.title)
       formData.append('body', this.body)
       this.$http.post(this.url,
           formData
-      ).then(()=> {
-        console.log("created")
+      ).then(() => {
         this.$emit("created")
       })
 
