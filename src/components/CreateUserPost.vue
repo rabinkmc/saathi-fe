@@ -56,11 +56,11 @@ export default {
       formData.append('body', this.body)
       this.$http.post(this.url,
           formData
-      ).then(response => {
-        console.log(response)
+      ).then(()=> {
+        console.log("created")
+        this.$emit("created")
       })
 
-      this.$emit("created")
     }
 
 

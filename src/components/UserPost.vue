@@ -8,7 +8,6 @@
          <div class="flex justify-between">
             <h2 class="text-lg font-semibold text-gray-900 -mt-1">{{post.author}}</h2>
 <!--            <small class="text-sm text-gray-700">22h ago</small>-->
-          <ContextMenu/>
          </div>
         <p class="text-gray-700">{{post.modified}} </p>
          <p class="mt-3 text-black">{{post.title}}</p>
@@ -18,13 +17,10 @@
 </div>
 </template>
 <script>
-import ContextMenu from "@/components/ContextMenu.vue"
 export default {
   props: {
     post: {}
   },
-  components: {
-    ContextMenu
-  }
+  components: {}
 }
 </script>
